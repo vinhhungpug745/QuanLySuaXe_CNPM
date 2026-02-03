@@ -123,10 +123,3 @@ Phân quyền chi tiết theo vai trò
 
 Tối ưu hiệu năng truy vấn database
 
-## 👤 Author
-
-Name: HungVinh
-
-GitHub: https://github.com/vinhhungpug745
-
-Email: vinhhungpug745@gmail.com
