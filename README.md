@@ -58,6 +58,7 @@ QuanLySuaXe_CNPM/
 ├── README.md
 ├── .gitignore
 └── .gitattributes
+```
 
 ---
 
@@ -88,7 +89,7 @@ GOOGLE_CLIENT_SECRET=your_google_client_secret
 5️⃣ Chạy project
 python app/index.py
 
-🔐 Security Notes
+## 🔐 Security Notes
 
 Không hard-code secret key, database password
 
@@ -96,7 +97,7 @@ Sử dụng biến môi trường để bảo mật thông tin
 
 Đã cấu hình .gitignore để tránh push dữ liệu nhạy cảm
 
-📚 What I Learned
+## 📚 What I Learned
 
 Xây dựng RESTful API với Flask
 
@@ -110,7 +111,7 @@ Quản lý cấu hình bằng environment variables
 
 Sử dụng Git & GitHub trong quá trình phát triển phần mềm
 
-🚀 Future Improvements
+## 🚀 Future Improvements
 
 Deploy hệ thống lên cloud (Render / Railway)
 
@@ -124,6 +125,5 @@ Tối ưu hiệu năng truy vấn database
 
 👤 Author
 Name: HungVinh
-Major: Software Engineering / IT
 GitHub: https://github.com/vinhhungpug745
 Email: vinhhungpug745@gmail.com
