@@ -1,0 +1,140 @@
+{% extends 'layout/base.html' %}
+{% block title %}Linh kiện{% endblock %}
+<body>
+{% block content %}
+    <div class="sort_Controls">
+        <li class="nav-item dropdown">
+            <span>Lọc sản phẩm theo</span>
+            <div class="btn sort_Controls-item">
+                <a class="nav-link dropdown-toggle" href="#" role="button"
+                   data-bs-toggle="dropdown">{{ selected_vehicle_name }}</a>
+                <ul class="dropdown-menu">
+                    {%for a in vehicles%}
+                    <li>
+                        {% set new_args = current_args.copy() %}
+                        {% set updated = new_args.update({'vehicle_id': a.id}) %}
+                        <a class="dropdown-item" href="/components/?{{ new_args|urlencode }}">{{a.name}}</a>
+                    </li>
+                    {%endfor%}
+                    <li>
+                        {% set new_args_clear = current_args.copy() %}
+                        {% set removed = new_args_clear.pop('vehicle_id', None) %}
+                        <a class="dropdown-item" href="/components/?{{ new_args_clear|urlencode }}"
+                           style="font-weight: bold; color: #e3342f;">— Bỏ lọc —</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="btn sort_Controls-item">
+                <a class="nav-link dropdown-toggle" href="#" role="button"
+                   data-bs-toggle="dropdown">{{selected_brand_name}}</a>
+                <ul class="dropdown-menu">
+                    {%for b in brands%}
+                    <li>
+                        {% set new_args = current_args.copy() %}
+                        {% set updated = new_args.update({'brand_id': b.id}) %}
+                        <a class="dropdown-item" href="/components/?{{ new_args|urlencode }}">{{b.name}}</a>
+                    </li>
+                    {%endfor%}
+                    <li>
+                        {% set new_args_clear = current_args.copy() %}
+                        {% set removed = new_args_clear.pop('brand_id', None) %}
+                        <a class="dropdown-item" href="/components/?{{ new_args_clear|urlencode }}"
+                           style="font-weight: bold; color: #e3342f;">— Bỏ lọc —</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </div>
+    <div class="container">
+        <div class="product-card">
+            {% if comps %}
+            <div class="row">
+                {%for c in comps%}
+                <div class="col-md-3 col-6">
+                    <div class="card">
+                        <div class="badge">HOT SALE</div>
+                        <div class="tilt">
+                            <div class="img">
+                                <img src="{{c.image}}" alt="{{c.name}}">
+                            </div>
+                        </div>
+                        <div class="info">
+                            <h2 class="title">{{c.name}}</h2>
+                            <div class="meta">
+                                <div class="rating">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700"
+                                         stroke-width="0.5">
+                                        <polygon
+                                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                    </svg>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700"
+                                         stroke-width="0.5">
+                                        <polygon
+                                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                    </svg>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700"
+                                         stroke-width="0.5">
+                                        <polygon
+                                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                    </svg>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700"
+                                         stroke-width="0.5">
+                                        <polygon
+                                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                    </svg>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700"
+                                         stroke-width="0.5">
+                                        <polygon
+                                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                    </svg>
+                                    <span class="rcount">245 Reviews</span>
+                                </div>
+                                <div class="stock">In Stock</div>
+                            </div>
+                            <div class="bottom">
+                                <div class="price">
+
+                                    <span class="new">{{ c.price | vnd }} VNĐ</span>
+                                </div>
+                                <button class="btn d-none" onclick="addToCart({{c.id}},'{{ c.name }}',{{ c.price }},'{{ c.image }}')">
+                                    <span>Add to Cart</span>
+                                    <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2">
+                                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4"/>
+                                        <line x1="3" y1="6" x2="21" y2="6"/>
+                                        <path d="M16 10a4 4 0 01-8 0"/>
+                                    </svg>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                {%endfor%}
+            </div>
+            {%if pages>1%}
+                <ul class="pagination mt-3 justify-content-center">
+                    {%for i in range(1, (pages+1))%}
+                    <li class="page-item"><a class="page-link" href="/components/?page={{i}}">{{i}}</a></li>
+                    {%endfor%}
+                </ul>
+            {%endif%}
+            {% else %}
+            <!-- HIỂN THỊ THÔNG BÁO (NẾU KHÔNG CÓ KẾT QUẢ) -->
+            <div class="text-center p-5 bg-white rounded-lg shadow-sm">
+                <h3 class="text-secondary mb-3">
+                    Không tìm thấy sản phẩm nào
+                </h3>
+                <p class="text-muted">
+                    Vui lòng thử điều chỉnh lại bộ lọc (Loại linh kiện, Hãng linh kiện) hoặc từ khóa tìm kiếm.
+                </p>
+                <a href="/components">Quay trở lại trang chủ</a>
+            </div>
+
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+</body>

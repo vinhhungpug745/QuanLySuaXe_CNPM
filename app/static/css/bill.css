@@ -1,0 +1,78 @@
+/* Modal nền mờ */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+
+    justify-content: center;
+    align-items: center;
+}
+
+/* Khung hóa đơn */
+.modal-content {
+    position: relative;
+    background: #fff;
+    padding: 30px 35px;
+    width: 520px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    animation: fadeIn 0.25s ease-in-out;
+}
+
+/* Tiêu đề */
+.modal-content h3 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+/* Nội dung hóa đơn */
+#receiptInfo {
+    text-align: left;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    font-size: 15px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+/* Nút đóng */
+.btn-close {
+    margin: 20px auto 0;
+    padding: 8px 16px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: block;
+}
+
+/* Nút X */
+.close-btn {
+    position: absolute;
+    right: 18px;
+    top: 12px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #999;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

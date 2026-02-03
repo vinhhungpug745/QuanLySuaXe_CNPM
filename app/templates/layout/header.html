@@ -1,0 +1,67 @@
+<div class="top-header">
+    <div class="header-left">
+        <i class="fa-solid fa-bars"></i>
+        <span class="text-muted">
+            Trang chủ
+            {% if page is defined and page != 'Trang chủ' %}
+                > {{ page }}
+            {% endif %}
+        </span>
+    </div>
+
+    <div class="header-right">
+        <div class="search-box">
+            <form class="d-flex" method="get">
+                <i class="bi bi-search"></i>
+                <input class="form-control me-2" type="text" placeholder="Tìm kiếm " name="q">
+            </form>
+        </div>
+        <div class="cart">
+            <div id="mini-cart" class="mini-cart-box">
+                {% if 'cart' in session and session['cart'] %}
+                    <h5>Shopping Cart</h5>
+                    <br>
+                    {% for c in session['cart'].values() %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex flex-row align-items-center">
+                                        <div>
+                                            <img
+                                                    src="{{ c.image }}"
+                                                    class="img-fluid rounded-3" style="width: 50px;">
+                                        </div>
+                                        <div class="ms-3">
+                                            <h5>{{ c.name }}</h5>
+                                            <p class="small mb-0">{{ c.quantity }} × {{ c.price }} đ</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center">
+                                        <a href="#" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <hr>
+                    <p class="fw-bold">Total Quantity: <span id="total_quantity">{{ cart_stats.total_quantity }}</span>
+                    </p>
+                    <p class="fw-bold">Total Amount: <span
+                            id="total-amount">{{ "{:,.1f}".format(cart_stats.total_amount) }}</span> $</p>
+                {% else %}
+                    <p id="cart-empty"><i>Không có linh kiện nào trong giỏ hàng</i></p>
+                {% endif %}
+            </div>
+            <div class="cart_item">
+                <button class="icon-btn" onclick="toggleCart()">
+                    <i class="bi bi-cart3" style="color: black;"></i>
+                </button>
+                <span id="number_cart">{{ cart_stats.total_quantity }}</span>
+            </div>
+        </div>
+        {% if current_user.is_authenticated %}
+            <img src="{{ current_user.avatar }}" alt="Avatar" class="avatar">
+        {% endif %}
+    </div>
+
+</div>

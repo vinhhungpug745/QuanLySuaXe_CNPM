@@ -1,0 +1,177 @@
+{% extends 'layout/base.html' %}
+{% block head %}
+    {{ super() }}
+    <!-- Thêm dòng này -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_custom.css') }}">
+{% endblock %}
+{% block content %}
+<div class="admin-wrapper">
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div class="breadcrumb-section">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin"><i class="bi bi-speedometer2"></i> Quản trị</a></li>
+                    <li class="breadcrumb-item active">{{ admin_view.name }}</li>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- Navigation Tabs - Tự động từ Flask-Admin -->
+        <div class="admin-nav-tabs">
+            {% for item in admin_view.admin._menu %}
+                {% if item.is_accessible() %}
+                <a href="{{ item.get_url() }}" class="nav-tab {{'active' if item.is_active(admin_view) else ''}}">
+                    <i class="bi bi-circle-fill nav-icon"></i>
+                    <span>{{ item.name }}</span>
+                </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main admin content -->
+    <div class="admin-content">
+        {% block body %}{% endblock %}
+    </div>
+</div>
+
+<style>
+    .admin-wrapper {
+        padding: 20px;
+        background: #f5f7fa;
+        min-height: calc(100vh - 60px);
+    }
+
+    .admin-header {
+        background: white;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .breadcrumb-section {
+        padding: 15px 20px;
+        background: linear-gradient(90deg, #b50000, #571010);
+    }
+
+    .breadcrumb {
+        margin: 0;
+        background: transparent;
+        padding: 0;
+    }
+
+    .breadcrumb-item a {
+        color: rgba(255,255,255,0.9);
+        text-decoration: none;
+    }
+
+    .breadcrumb-item a:hover {
+        color: white;
+    }
+
+    .breadcrumb-item.active {
+        color: white;
+        font-weight: 500;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        color: rgba(255,255,255,0.7);
+    }
+
+    /* Navigation Tabs */
+    .admin-nav-tabs {
+        display: flex;
+        background: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        overflow-x: auto;
+    }
+
+    .nav-tab {
+        padding: 15px 20px;
+        text-decoration: none;
+        color: #495057;
+        background: transparent;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    .nav-tab:hover {
+        background: rgba(0,123,255,0.05);
+        color: #007bff;
+    }
+
+    .nav-tab.active {
+        background: white;
+        color: #007bff;
+        border-bottom-color: #007bff;
+    }
+
+    .nav-tab .nav-icon {
+        font-size: 0.6rem;
+    }
+
+    .flash-messages {
+        margin-bottom: 20px;
+    }
+
+    .admin-content {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    /* Ẩn menu mặc định của Flask-Admin */
+    .navbar-nav {
+        display: none !important;
+    }
+
+    /* Scrollbar cho tabs */
+    .admin-nav-tabs::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .admin-nav-tabs::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .admin-nav-tabs::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .nav-tab span {
+            display: none;
+        }
+
+        .nav-tab {
+            padding: 15px;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}

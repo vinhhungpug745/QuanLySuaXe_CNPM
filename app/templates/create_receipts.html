@@ -1,0 +1,193 @@
+{% extends 'layout/base.html' %}
+{% block title %}Lập hóa đơn{% endblock %}
+<body>
+{% block content %}
+{% if rp_f %}
+<form>
+    <div class="row">
+        {% for rf in rp_f %}
+        <div class="col-md-6 mb-4">
+            <div class="card repair-card">
+                <!-- HEADER -->
+                <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                    <div>
+                        <i class="bi bi-receipt"></i>
+                        <strong class="ms-1">Phiếu sửa #{{ rf.id }}</strong>
+                    </div>
+                    {% if rf.reception_form.status.value == 5 %}
+                    <span class="badge bg-success">
+                        <i class="bi bi-check-circle"></i>
+                            {{ state.get(rf.reception_form.status) }}
+                    </span>
+                    {% else%}
+                    <span class="badge bg-warning text-dark">
+                            <i class="bi bi-tools"></i>
+                                {{ state.get(rf.reception_form.status) }}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+                <!-- BODY -->
+                <div class="card-body">
+
+                    <div class="row">
+                        <!-- LEFT -->
+                        <div class="col-md-6">
+                            <p class="info-item mb-2">
+                                <i class="bi bi-person"></i>
+                                <strong>Khách : </strong> {{ rf.reception_form.name }}
+                            </p>
+                            <p class="info-item mb-2">
+                                <i class="bi bi-telephone"></i>
+                                <strong>SĐT : </strong>{{ rf.reception_form.phonenumber }}
+                            </p>
+                            <p class="info-item mb-2">
+                                <i class="bi bi-car-front"></i>
+                                <strong>Biển số : </strong>{{ rf.reception_form.carnumber }}
+                            </p>
+                        </div>
+
+                        <!-- RIGHT -->
+                        <div class="col-md-6">
+                            <p class="info-item mb-2">
+                                <i class="bi bi-exclamation-circle"></i>
+                                <strong>Lỗi : </strong> {{ rf.reception_form.description }}
+                            </p>
+                            <p class="info-item mb-2">
+                                <i class="bi bi-person-gear"></i>
+                                <strong>KTV tiếp nhận : </strong>{{ rf.technick.name }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FOOTER -->
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    {% if rf.reception_form.status.value != 5 %}
+                    <div>
+                        <input type="checkbox"
+                               name="repair_form_ids"
+                               value="{{ rf.id }}">
+                        <span class="ms-1">Lập hóa đơn</span>
+                    </div>
+                    {%endif%}
+                    <button type="button"
+                            class="btn btn-sm btn-info"
+                            onclick="toggleDetail({{ rf.id }}, this)">
+                        Chi tiết
+                    </button>
+                </div>
+
+                <!-- DETAIL -->
+                <div id="detail-{{ rf.id }}" class="card-body border-top" style="display: none;">
+                    <div class="mb-3">
+                        <table class="table table-sm table-bordered mt-2">
+                            <colgroup>
+                                <col style="width: 30%">
+                                <col style="width: 10%">
+                                <col style="width: 30%">
+                                <col style="width: 10%">
+                                <col style="width: 10%">
+                            </colgroup>
+                            <thead class="table-light">
+                            <tr>
+                                <th>Hạng mục</th>
+                                <th>Chi phí</th>
+                                <th>Linh kiện</th>
+                                <th class="text-end">Giá LK</th>
+                                <th class="text-end">SL</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for c in rf.components %}
+                            <tr>
+                                <td>{{ c.action }}</td>
+                                <td>{{ c.cost | vnd}}</td>
+                                <td>{{ c.component.name }}</td>
+                                <td class="text-end">{{ c.component.price | vnd}}</td>
+                                <td class="text-end">{{ c.quantity }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-success mt-3" id="btnCreateReceipt">
+        Lập hóa đơn
+    </button>
+    <br>
+    <br>
+
+
+    <!-- Modal -->
+    <div id="receiptModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3> LẬP HÓA ĐƠN THÀNH CÔNG</h3>
+            <pre id="receiptInfo"></pre>
+        </div>
+    </div>
+</form>
+{%else%}
+<div>Không có phiếu để lập hóa đơn</div>
+{%endif%}
+<script>
+
+    function toggleDetail(id, btn) {
+        const row = document.getElementById("detail-" + id);
+
+        if (row.style.display === "none" || row.style.display === "") {
+            row.style.display = "table-row";
+            btn.innerText = "Ẩn";
+            btn.classList.remove("btn-info");
+            btn.classList.add("btn-secondary");
+        } else {
+            row.style.display = "none";
+            btn.innerText = "Chi tiết";
+            btn.classList.remove("btn-secondary");
+            btn.classList.add("btn-info");
+        }
+    }
+
+
+    document.getElementById("btnCreateReceipt").addEventListener("click", function(e) {
+        e.preventDefault();
+
+        const checked = document.querySelectorAll("input[name='repair_form_ids']:checked");
+        const ids = Array.from(checked).map(cb => parseInt(cb.value));
+
+        if (ids.length === 0) {
+            alert("Vui lòng chọn ít nhất 1 phiếu sửa");
+            return;
+        }
+        fetch("/create_receipts/api-createreceipt", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ repair_form_ids: ids })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.receipt_id) {
+                document.getElementById("receiptInfo").innerText =`Tạo hoá đơn thành công`;
+                document.getElementById("receiptModal").style.display = "flex";
+            } else {
+                alert(data.error || "Có lỗi xảy ra");
+            }
+        });
+    });
+
+function closeModal() {
+    document.getElementById("receiptModal").style.display = "none";
+}
+
+
+</script>
+{% endblock %}
+</body>

@@ -1,0 +1,37 @@
+{
+  "repair_form": {
+    "id": 3,
+    "technick_id": 5,
+    "receipt_id": null,
+    "reception_form_id": 1
+  },
+  "repair_components": [
+    {
+      "id_repair_form": 1,
+      "id_component": 3,
+      "component_name": "Phuộc sau AB125",
+      "quantity": 1,
+      "unit_price": 1000,
+      "cost": 2000,
+      "action": "Thay phuộc sau"
+    },
+    {
+      "id_repair_form": 1,
+      "id_component": 5,
+      "component_name": "Bánh mâm sau",
+      "quantity": 1,
+      "unit_price": 29000,
+      "cost": 10050,
+      "action": "Thay bánh mâm sau"
+    },
+    {
+      "id_repair_form": 1,
+      "id_component": 6,
+      "component_name": "Bộ nồi AB125",
+      "quantity": 1,
+      "unit_price": 29095,
+      "cost": 15042,
+      "action": "Thay bộ nồi xe"
+    }
+  ]
+}

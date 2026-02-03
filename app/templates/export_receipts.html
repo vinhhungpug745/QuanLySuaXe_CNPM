@@ -1,0 +1,193 @@
+{% extends 'layout/base.html' %}
+{% block title %}Xuất hóa đơn{% endblock %}
+
+<body>
+
+{% block content %}
+<div class="invoice-wrapper">
+
+    {% if receipt %}
+    {% for rc in receipt %}
+
+    <div class="invoice-card">
+
+        <!-- HEADER -->
+        <div class="invoice-header">
+            <h2>HÓA ĐƠN #{{ rc.id }}</h2>
+        </div>
+
+        {% for rf in rc.repair_forms %}
+        <div class="repair-card">
+            <h4>Phiếu sửa #{{ rf.id }}</h4>
+
+            <p>
+                <strong>Khách:</strong> {{ rf.reception_form.name }} <br>
+                <strong>Biển số:</strong> {{ rf.reception_form.carnumber }} <br>
+                <strong>KTV:</strong> {{ rf.technick.name }} <br>
+                <strong>Ngày:</strong> {{ rc.created_date.strftime('%d/%m/%Y') }}
+            </p>
+
+            <table class="invoice-table">
+                <colgroup>
+                    <col style="width: 30%">
+                    <col style="width: 10%">
+                    <col style="width: 30%">
+                    <col style="width: 10%">
+                    <col style="width: 10%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>Hạng mục</th>
+                    <th>Tiền công</th>
+                    <th>Linh kiện</th>
+                    <th>Đơn giá</th>
+                    <th>SL</th>
+                    <th>Thành tiền</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for c in rf.components %}
+                <tr>
+                    <td>{{ c.action }}</td>
+                    <td class="right">{{ c.cost | vnd}}</td>
+                    <td>{{ c.component.name }}</td>
+                    <td class="right">{{ c.component.price | vnd}}</td>
+                    <td class="right">{{ c.quantity }}</td>
+                    <td class="right">
+                        {{ (c.component.price * c.quantity) | vnd}}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+
+        <!-- TOTAL -->
+        <div class="invoice-total">
+            <p>
+                <span>Tổng (chưa VAT)</span>
+                <strong>{{ (rc.total_labor_cost + rc.total_component_cost) | vnd }} VNĐ</strong>
+            </p>
+            <p class="grand-total">
+                <span>Tổng thanh toán (VAT {{ vat.VAT }}%)</span>
+                <strong>{{ rc.total_cost | vnd}} VNĐ</strong>
+            </p>
+        </div>
+
+        <!-- ACTION -->
+        <div class="invoice-action">
+            <a href="{{ url_for('export_receipts_bp.export', receipt_id=rc.id) }}"
+               class="btn-export">
+                Xuất hóa đơn PDF
+            </a>
+        </div>
+
+        <br>
+
+    </div>
+
+    {% endfor %}
+    {% else %}
+    <p class="text-center">Không có hóa đơn nào hết.</p>
+    {% endif %}
+
+</div>
+
+<style>
+    /* ====== TỔNG THỂ ====== */
+    .invoice-wrapper {
+        max-width: 900px;
+        margin: auto;
+    }
+
+    /* ====== CARD ====== */
+    .invoice-card {
+        border: 2px solid #f1b0b7;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+        background: #fff;
+    }
+
+    /* ====== HEADER ====== */
+    .invoice-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fde2e4;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        color: #b02a37;
+    }
+
+
+
+    /* ====== REPAIR ====== */
+    .repair-card {
+        margin-top: 15px;
+    }
+
+    .repair-card h4 {
+        color: #b02a37;
+    }
+
+    /* ====== TABLE ====== */
+    .invoice-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    .invoice-table th,
+    .invoice-table td {
+        border: 1px solid #f1b0b7;
+        padding: 8px;
+    }
+
+    .invoice-table th {
+        background: #fde2e4;
+        color: #842029;
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    /* ====== TOTAL ====== */
+    .invoice-total {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+    .invoice-total p {
+        margin: 5px 0;
+    }
+
+    .grand-total {
+        font-size: 18px;
+        color: #b02a37;
+    }
+
+    /* ====== BUTTON ====== */
+    .invoice-action {
+        text-align: right;
+        margin-top: 15px;
+    }
+
+    .btn-export {
+        background: #dc3545;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+
+    .btn-export:hover {
+        background: #b02a37;
+    }
+</style>
+{% endblock %}
+</body>
+

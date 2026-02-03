@@ -1,0 +1,577 @@
+/* =====================================================
+   Flask-Admin Custom Styles - Integration với master.html
+   ===================================================== */
+
+/* Override Bootstrap Toolbar */
+.btn-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    margin-bottom: 20px;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-bottom: 2px solid #f1f3f5;
+}
+
+/* Left Group - Actions */
+.btn-toolbar > .btn-group:first-child {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* List Button (5) */
+.btn-toolbar .btn-default,
+.btn-toolbar .btn-secondary {
+    padding: 9px 18px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #495057;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-toolbar .btn-default:hover,
+.btn-toolbar .btn-secondary:hover {
+    border-color: #b50000;
+    background: #fff5f5;
+    color: #b50000;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(181, 0, 0, 0.15);
+}
+
+/* Create & Export Links */
+.btn-toolbar a:not(.btn):not(.dropdown-toggle),
+.btn-toolbar .btn-link {
+    padding: 9px 16px;
+    background: transparent;
+    border: none;
+    color: #b50000;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-toolbar a:not(.btn):not(.dropdown-toggle):hover,
+.btn-toolbar .btn-link:hover {
+    background: #fff5f5;
+    color: #8b0000;
+}
+
+/* Dropdown - With selected */
+.btn-toolbar .dropdown {
+    position: relative;
+}
+
+.btn-toolbar .dropdown-toggle {
+    padding: 9px 18px;
+    background: transparent;
+    border: none;
+    color: #b50000;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-toolbar .dropdown-toggle:hover {
+    background: #fff5f5;
+    color: #8b0000;
+}
+
+.btn-toolbar .dropdown-toggle::after {
+    margin-left: 4px;
+    border-top-color: currentColor;
+}
+
+.btn-toolbar .dropdown-menu {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    padding: 6px 0;
+    margin-top: 4px;
+    min-width: 180px;
+}
+
+.btn-toolbar .dropdown-item {
+    padding: 10px 18px;
+    font-size: 14px;
+    color: #495057;
+    transition: all 0.2s ease;
+}
+
+.btn-toolbar .dropdown-item:hover {
+    background: #f8f9fa;
+    color: #b50000;
+    padding-left: 22px;
+}
+
+.btn-toolbar .dropdown-divider {
+    margin: 6px 0;
+}
+
+/* Right Group - Search Form */
+.btn-toolbar form,
+.btn-toolbar .form-inline {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-left: auto;
+    flex-wrap: wrap;
+}
+
+/* Form Group trong Toolbar */
+.btn-toolbar .form-group {
+    margin-bottom: 0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Input Fields - Vietnamese placeholders */
+.btn-toolbar .form-control {
+    padding: 9px 14px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 14px;
+    min-width: 180px;
+    transition: all 0.25s ease;
+    background: #f8f9fa;
+    color: #495057;
+}
+
+.btn-toolbar .form-control:focus {
+    outline: none;
+    border-color: #b50000;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(181, 0, 0, 0.1);
+}
+
+.btn-toolbar .form-control::placeholder {
+    color: #adb5bd;
+    font-style: italic;
+}
+
+/* Search Button - Match theme color */
+.btn-toolbar button[type="submit"],
+.btn-toolbar .btn-primary {
+    padding: 9px 20px;
+    background: linear-gradient(135deg, #b50000, #8b0000);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 6px rgba(181, 0, 0, 0.2);
+}
+
+.btn-toolbar button[type="submit"]:hover,
+.btn-toolbar .btn-primary:hover {
+    background: linear-gradient(135deg, #8b0000, #660000);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(181, 0, 0, 0.3);
+}
+
+.btn-toolbar button[type="submit"]:active,
+.btn-toolbar .btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(181, 0, 0, 0.2);
+}
+
+/* Icons trong buttons */
+.btn-toolbar .fa,
+.btn-toolbar .glyphicon,
+.btn-toolbar .bi {
+    font-size: 14px;
+}
+
+/* Badge for count (số lượng items) */
+.btn-toolbar .badge {
+    margin-left: 6px;
+    padding: 3px 7px;
+    background: #b50000;
+    color: white;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* =====================================================
+   Table Improvements
+   ===================================================== */
+.table-responsive {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: none;
+    margin-top: 20px;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead {
+    background: linear-gradient(90deg, #f8f9fa, #ffffff);
+}
+
+.table thead th {
+    color: #495057;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+    padding: 14px 16px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table thead th a {
+    color: #495057;
+    text-decoration: none;
+}
+
+.table thead th a:hover {
+    color: #b50000;
+}
+
+.table tbody tr {
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.table tbody tr:hover {
+    background: #fff5f5;
+}
+
+.table tbody td {
+    padding: 12px 16px;
+    vertical-align: middle;
+    color: #495057;
+    font-size: 14px;
+}
+
+/* Checkbox column */
+.table tbody td:first-child,
+.table thead th:first-child {
+    width: 40px;
+    text-align: center;
+}
+
+.table input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+/* Action Column Buttons */
+.table .btn-sm {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    margin-right: 4px;
+    font-weight: 500;
+}
+
+.table .btn-primary {
+    background: #007bff;
+    border-color: #007bff;
+}
+
+.table .btn-primary:hover {
+    background: #0056b3;
+}
+
+.table .btn-danger {
+    background: #dc3545;
+    border-color: #dc3545;
+}
+
+.table .btn-danger:hover {
+    background: #c82333;
+}
+
+/* =====================================================
+   Pagination
+   ===================================================== */
+.pagination {
+    margin-top: 24px;
+    justify-content: center;
+    gap: 6px;
+}
+
+.pagination .page-item {
+    margin: 0;
+}
+
+.pagination .page-link {
+    border: 1px solid #dee2e6;
+    color: #495057;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #b50000, #8b0000);
+    border-color: #b50000;
+    color: white;
+    box-shadow: 0 2px 6px rgba(181, 0, 0, 0.25);
+}
+
+.pagination .page-link:hover {
+    background: #fff5f5;
+    color: #b50000;
+    border-color: #b50000;
+}
+
+.pagination .page-item.disabled .page-link {
+    background: #f8f9fa;
+    color: #adb5bd;
+    border-color: #dee2e6;
+    cursor: not-allowed;
+}
+
+/* =====================================================
+   Modal & Forms
+   ===================================================== */
+.modal-header {
+    background: linear-gradient(90deg, #b50000, #8b0000);
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+.modal-header .close {
+    color: white;
+    opacity: 0.9;
+}
+
+.modal-header .close:hover {
+    opacity: 1;
+}
+
+.form-control:focus {
+    border-color: #b50000;
+    box-shadow: 0 0 0 0.2rem rgba(181, 0, 0, 0.15);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #b50000, #8b0000);
+    border-color: #b50000;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #8b0000, #660000);
+    border-color: #8b0000;
+}
+
+/* =====================================================
+   Filters
+   ===================================================== */
+.filter-container {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.filter-item {
+    margin-bottom: 10px;
+}
+
+.filter-item select,
+.filter-item input {
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+}
+
+.filter-item select:focus,
+.filter-item input:focus {
+    border-color: #b50000;
+    box-shadow: 0 0 0 0.2rem rgba(181, 0, 0, 0.1);
+}
+
+/* =====================================================
+   Responsive Design
+   ===================================================== */
+@media (max-width: 992px) {
+    .btn-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .btn-toolbar > .btn-group:first-child {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .btn-toolbar form,
+    .btn-toolbar .form-inline {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .btn-toolbar .form-control {
+        flex: 1;
+        min-width: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .btn-toolbar > .btn-group:first-child {
+        flex-wrap: wrap;
+    }
+
+    .btn-toolbar .btn,
+    .btn-toolbar a {
+        flex: 1;
+        min-width: 120px;
+        justify-content: center;
+    }
+
+    .btn-toolbar form,
+    .btn-toolbar .form-inline {
+        flex-direction: column;
+    }
+
+    .btn-toolbar .form-group {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .btn-toolbar .form-control {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .btn-toolbar button[type="submit"] {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .btn-toolbar .btn,
+    .btn-toolbar a {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    .table {
+        font-size: 13px;
+    }
+
+    .table thead th,
+    .table tbody td {
+        padding: 10px 8px;
+    }
+}
+
+/* =====================================================
+   Print Styles
+   ===================================================== */
+@media print {
+    .btn-toolbar,
+    .pagination,
+    .admin-header,
+    .breadcrumb-section {
+        display: none !important;
+    }
+
+    .admin-content {
+        box-shadow: none;
+        padding: 0;
+    }
+
+    .table {
+        border: 1px solid #000;
+    }
+}
+
+/* =====================================================
+   Additional Utilities
+   ===================================================== */
+
+/* Loading state */
+.btn-loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+}
+
+.btn-loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+    to { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 64px;
+    margin-bottom: 20px;
+    opacity: 0.3;
+}
+
+/* Success/Error messages trong toolbar */
+.btn-toolbar .text-success {
+    color: #28a745 !important;
+    font-weight: 600;
+}
+
+.btn-toolbar .text-danger {
+    color: #dc3545 !important;
+    font-weight: 600;
+}
+
+.admin-content .form-inline {
+    display: flex;
+}
+
+.nav-tab.active  {
+    background: white !important;
+    color: red !important;
+    border-bottom-color: red !important;
+}
+
+.admin-content .list-buttons-column{
+    display: flex;
+    justify-content: space-between;
+}

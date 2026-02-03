@@ -1,0 +1,956 @@
+{% extends 'layout/base.html' %}
+{% block title %}DS phiếu{% endblock %}
+
+{% block content %}
+<style>
+        .form_receptions {
+            margin-top: 20px;
+        }
+
+        /* USER LIST TABLE */
+        .form_receptions .user-list tbody td > img {
+            position: relative;
+            max-width: 50px;
+            float: left;
+            margin-right: 15px;
+        }
+        .form_receptions .user-list tbody td .user-link {
+            display: block;
+            font-size: 1.25em;
+            padding-top: 3px;
+<!--            margin-left: 60px;-->
+        }
+        .form_receptions .user-list tbody td .user-subhead {
+            font-size: 0.875em;
+            font-style: italic;
+        }
+
+        /* TABLES */
+        .form_receptions .table {
+            border-collapse: separate;
+        }
+        .form_receptions .table-hover > tbody > tr:hover > td,
+        .form_receptions .table-hover > tbody > tr:hover > th {
+            background-color: #eee;
+        }
+        .form_receptions .table thead > tr > th {
+            border-bottom: 1px solid #C2C2C2;
+            padding-bottom: 0;
+        }
+        .form_receptions .table tbody > tr > td {
+            font-size: 0.875em;
+            background: #f5f5f5;
+            border-top: 10px solid #fff;
+            vertical-align: middle;
+            padding: 12px 8px;
+        }
+        .form_receptions .table tbody > tr > td:first-child,
+        .form_receptions .table thead > tr > th:first-child {
+            padding-left: 20px;
+        }
+        .form_receptions .table thead > tr > th span {
+            border-bottom: 2px solid #C2C2C2;
+            display: inline-block;
+            padding: 0 5px;
+            padding-bottom: 5px;
+            font-weight: normal;
+        }
+        .form_receptions .table thead > tr > th > a span {
+            color: #344644;
+        }
+        .form_receptions .table thead > tr > th > a span:after {
+            content: "\f0dc";
+            font-family: FontAwesome;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: inherit;
+            margin-left: 5px;
+            font-size: 0.75em;
+        }
+        .form_receptions .table thead > tr > th > a.asc span:after {
+            content: "\f0dd";
+        }
+        .form_receptions .table thead > tr > th > a.desc span:after {
+            content: "\f0de";
+        }
+        .form_receptions .table thead > tr > th > a:hover span {
+            text-decoration: none;
+            color: #2bb6a3;
+            border-color: #2bb6a3;
+        }
+        .form_receptions .table.table-hover tbody > tr > td {
+            -webkit-transition: background-color 0.15s ease-in-out 0s;
+            transition: background-color 0.15s ease-in-out 0s;
+        }
+        .form_receptions .table tbody tr td .call-type {
+            display: block;
+            font-size: 0.75em;
+            text-align: center;
+        }
+        .form_receptions .table tbody tr td .first-line {
+            line-height: 1.5;
+            font-weight: 400;
+            font-size: 1.125em;
+        }
+        .form_receptions .table tbody tr td .first-line span {
+            font-size: 0.875em;
+            color: #969696;
+            font-weight: 300;
+        }
+        .form_receptions .table tbody tr td .second-line {
+            font-size: 0.875em;
+            line-height: 1.2;
+        }
+        .form_receptions .table a.table-link {
+            margin: 0 5px;
+            font-size: 1.125em;
+        }
+        .form_receptions .table a.table-link:hover {
+            text-decoration: none;
+            color: #2aa493;
+        }
+        .form_receptions .table a.table-link.danger {
+            color: #fe635f;
+        }
+        .form_receptions .table a.table-link.danger:hover {
+            color: #dd504c;
+        }
+
+        .form_receptions .table-products tbody > tr > td {
+            background: none;
+            border: none;
+            border-bottom: 1px solid #ebebeb;
+            -webkit-transition: background-color 0.15s ease-in-out 0s;
+            transition: background-color 0.15s ease-in-out 0s;
+            position: relative;
+        }
+        .form_receptions .table-products tbody > tr:hover > td {
+            text-decoration: none;
+            background-color: #f6f6f6;
+        }
+        .form_receptions .table-products .name {
+            display: block;
+            font-weight: 600;
+            padding-bottom: 7px;
+        }
+        .form_receptions .table-products .price {
+            display: block;
+            text-decoration: none;
+            width: 50%;
+            float: left;
+            font-size: 0.875em;
+        }
+        .form_receptions .table-products .price > i {
+            color: #8dc859;
+        }
+        .form_receptions .table-products .warranty {
+            display: block;
+            text-decoration: none;
+            width: 50%;
+            float: left;
+            font-size: 0.875em;
+        }
+        .form_receptions .table-products .warranty > i {
+            color: #f1c40f;
+        }
+        .form_receptions .table tbody > tr.table-line-fb > td {
+            background-color: #9daccb;
+            color: #262525;
+        }
+        .form_receptions .table tbody > tr.table-line-twitter > td {
+            background-color: #9fccff;
+            color: #262525;
+        }
+        .form_receptions .table tbody > tr.table-line-plus > td {
+            background-color: #eea59c;
+            color: #262525;
+        }
+        .form_receptions .table-stats .status-social-icon {
+            font-size: 1.9em;
+            vertical-align: bottom;
+        }
+        .form_receptions .table-stats .table-line-fb .status-social-icon {
+            color: #556484;
+        }
+        .form_receptions .table-stats .table-line-twitter .status-social-icon {
+            color: #5885b8;
+        }
+        .form_receptions .table-stats .table-line-plus .status-social-icon {
+            color: #a75d54;
+        }
+
+        .form_receptions .label {
+            display: inline-block;
+            padding: 0.25em 0.6em;
+            font-size: 0.75em;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 0.25rem;
+        }
+
+        .form_receptions .label-WAIT_APPROVAL {
+            background-color: #ffc107; /* vàng */
+            color: #212529;
+        }
+
+        .form_receptions .label-REFUSE {
+            background-color: #dc3545; /* đỏ */
+            color: #fff;
+        }
+
+        .form_receptions .label-WAIT_REPAIR {
+            background-color: #0d6efd; /* xanh dương */
+            color: #fff;
+        }
+
+        .form_receptions .label-REPAIRED_WAIT_PAY {
+            background-color: #fd7e14; /* cam */
+            color: #fff;
+        }
+
+        .form_receptions .label-SUCCESS {
+            background-color: #28a745; /* xanh lá */
+            color: #fff;
+        }
+
+
+        .form_receptions .main-box {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .form_receptions .pagination {
+            justify-content: flex-end;
+        }
+
+        $opacity-transition: opacity $speed ease-in-out;
+
+
+            .form_receptions .modal-header {
+                align-items: baseline;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .form_receptions .close {
+                background: none;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                height: 16px;
+                text-decoration: none;
+                width: 16px;
+
+                svg {
+                    width: 16px;
+                }
+            }
+
+            .form_receptions .modal-wrapper {
+                align-items: center;
+                background: rgba(0, 0, 0, 0.7);
+                bottom: 0;
+                display: flex;
+                justify-content: center;
+                left: 0;
+                position: fixed;
+                right: 0;
+                top: 0;
+            }
+
+            #modal {
+                opacity: 0;
+                transition: $opacity-transition;
+                visibility: hidden;
+
+                &:target {
+                    opacity: 1;
+                    visibility: visible;
+
+                    .modal-body {
+                        opacity: 1;
+                        transform: translateY(1);
+                    }
+                }
+
+                .modal-body {
+                    max-width: 500px;
+                    opacity: 0;
+                    transform: translateY(-100px);
+                    transition: $opacity-transition;
+                    width: 100%;
+                    z-index: 1;
+                }
+            }
+
+            .form_receptions .outside-trigger {
+                bottom: 0;
+                cursor: default;
+                left: 0;
+                position: fixed;
+                right: 0;
+                top: 0;
+            }
+
+            .form_receptions .button__link {
+                text-decoration: none;
+            }
+
+            /* Modal Overlay */
+.modal-receptionform.modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-receptionform.modal-wrapper.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Body */
+.modal-receptionform .modal-body {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    max-width: 700px;
+    width: 90%;
+    padding: 0;
+    position: relative;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+}
+
+
+.modal-receptionform.modal-wrapper.active .modal-body {
+    transform: translateY(0);
+}
+
+/* Modal Header */
+.modal-receptionform .modal-header {
+    background: var(--active-color);
+    padding: 24px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-receptionform .modal-header h3 {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.modal-receptionform .modal-header .close {
+    color: #ffffff;
+    font-size: 32px;
+    line-height: 1;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    opacity: 0.9;
+    padding: 0 4px;
+}
+
+.modal-receptionform .modal-header .close:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+/* Modal Content */
+.modal-receptionform .modal-body > p {
+    padding: 16px 28px;
+    margin: 0;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.modal-receptionform .modal-body > p:last-of-type {
+    border-bottom: none;
+}
+
+.modal-receptionform .modal-body > p:hover {
+    background-color: #f8f9ff;
+}
+
+.modal-receptionform .modal-body > p strong {
+    color: #4a5568;
+    font-weight: 600;
+    min-width: 140px;
+    font-size: 15px;
+}
+
+.modal-receptionform .modal-body > p span {
+    font-size: 15px;
+    flex: 1;
+}
+
+/* Status Badge Styling */
+.modal-receptionform #modal_state {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+/* Outside Trigger */
+.modal-receptionform .outside-trigger {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .modal-receptionform .modal-body {
+        width: 95%;
+        max-width: none;
+    }
+
+    .modal-receptionform .modal-header {
+        padding: 20px 20px;
+    }
+
+    .modal-receptionform .modal-header h3 {
+        font-size: 20px;
+    }
+
+    .modal-receptionform .modal-body > p {
+        padding: 14px 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .modal-receptionform .modal-body > p strong {
+        min-width: auto;
+        font-size: 14px;
+    }
+
+    .modal-receptionform .modal-body > p span {
+        font-size: 14px;
+    }
+}
+
+.modal-receptionform .modal-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #2d3748;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.modal-receptionform .modal-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.modal-receptionform .modal-input[readonly] {
+    background-color: #f7fafc;
+    cursor: not-allowed;
+    color: #718096;
+}
+
+.modal-receptionform textarea.modal-input {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.modal-receptionform select.modal-input {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    appearance: none;
+}
+
+/* Modal footer buttons */
+.modal-receptionform .modal-footer {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding: 20px 28px;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 10px;
+}
+
+.modal-receptionform .btn-cancel,
+.modal-receptionform .btn-save {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-receptionform .btn-cancel {
+    background: #e2e8f0;
+    color: #4a5568;
+}
+
+.modal-receptionform .btn-cancel:hover {
+    background: #cbd5e0;
+}
+
+.modal-receptionform .btn-save {
+    background: var(--active-color);;
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.modal-receptionform .btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+/* Override flex direction for inputs */
+.modal-receptionform #modal2 .modal-body > p {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.modal-receptionform #modal2 .modal-body > p strong {
+    min-width: auto;
+}
+
+    .filter-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.filter-btn {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    background: white;
+    text-align: left;
+    cursor: pointer;
+}
+
+.filter-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    margin-top: 4px;
+    display: none;
+    z-index: 1000;
+}
+
+.filter-menu.show {
+    display: block;
+}
+
+.filter-item {
+    display: block;
+    padding: 10px 12px;
+    color: #333;
+    text-decoration: none;
+}
+
+.filter-item:hover {
+    background: #f5f5f5;
+}
+
+.filter-item.active {
+    background: #e7f1ff;
+    color: #0d6efd;
+    font-weight: 600;
+}
+    </style>
+    <div class="form_receptions">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="main-box clearfix">
+                        <div class="table-responsive">
+                            <table class="table user-list table-hover">
+                                <thead>
+                                    <tr>
+                                        <th><span>Người dùng</span></th>
+                                        <th><span>Ngày sửa</span></th>
+                                        <th><span>Thời gian</span></th>
+                                        <th class="text-center"><span>Trạng thái</span></th>
+                                        <th><span>Số điện thoại</span></th>
+                                        <th><span>Biển số xe</span></th>
+                                        <th>
+                                            <div class="w-full sm:w-half formbold-px-3">
+                                                <label class="formbold-form-label">Lọc theo tình trạng</label>
+                                                <div class="filter-dropdown">
+                                                    <button type="button" class="filter-btn" id="filterBtn">
+                                                        {% if request.args.get('status_name') %}
+                                                            {% for status in Form_status %}
+                                                                {% if status.name == request.args.get('status_name') %}
+                                                                    {{ state[status] }}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            Toàn bộ
+                                                        {% endif %}
+                                                        <i class="fa fa-chevron-down" style="float: right;"></i>
+                                                    </button>
+
+                                                    <div class="filter-menu" id="filterMenu">
+                                                        <a href="/receptions/"
+                                                           class="filter-item {% if not request.args.get('status_name') %}active{% endif %}">
+                                                            Toàn bộ
+                                                        </a>
+                                                        {% for status in Form_status %}
+                                                            <a href="/receptions/?status_name={{ status.name }}"
+                                                               class="filter-item {% if request.args.get('status_name') == status.name %}active{% endif %}">
+                                                                {{ state[status] }}
+                                                            </a>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if not data%}
+                                        <tr>
+                                            <td colspan="7" class="text-center" style="padding: 80px 20px;">
+                                                <i class="fa fa-inbox fa-5x text-muted mb-3 d-block"></i>
+                                                <h3 class="text-muted mb-2">Không tìm thấy phiếu</h3>
+                                                <p class="text-secondary mb-0">Chưa có dữ liệu để hiển thị</p>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        {%for d in data%}
+                                            <tr data-id="{{d.id}}"
+                                            data-name="{{d.name}}"
+                                            data-date-create="{{d.created_date.strftime('%d/%m/%Y %H:%M')}}"
+                                            data-date-book="{{d.appointment_date.strftime('%d/%m/%Y %H:%M')}}"
+                                            data-status="{{state[d.status]}}"
+                                            data-state="{{ d.status.name }}"
+                                            data-phone="{{d.phonenumber}}"
+                                            data-car="{{d.carnumber}}"
+                                            data-type-vehicle="{%if d.vehicletype%}{{d.vehicletype.name}}{%else%}Chưa có{%endif%}"
+                                            data-customer-type="{%if d.customer_id is none%}Trực tiếp{%else%}Trực tuyến{%endif%}"
+                                            data-avatar="{%if d.customer_id is not none%}{{d.customer.avatar}}{%endif%}"
+                                            data-description="{{d.description}}"
+                                        >
+                                            <td class="info">
+                                                {%if current_user.role.name == 'STAFF'%}
+                                                    {%if d.customer_id is not none %}
+                                                        <img src={{d.customer.avatar}} alt="">
+                                                    {%endif%}
+                                                {%endif%}
+                                                <a href="#" class="user-link">{{d.name}}</a>
+                                                {% if d.customer_id is none %}
+                                                    <span class="user-subhead">Trực tiếp</span>
+                                                {% else %}
+                                                    <span class="user-subhead">Trực tuyến</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="date">{{d.appointment_date.strftime('%d-%m-%Y')}}</td>
+                                            <td class="date">{{d.appointment_date.strftime('%H:%M')}}</td>
+
+                                            <td class="state text-center">
+                                                <span class="label label-{{ d.status.name }}">{{ state[d.status] }}</span>
+                                            </td>
+                                            <td class="phone_number">{{d.phonenumber}}</td>
+                                            <td class="car_number">{{d.carnumber}}</td>
+                                            <td style="width: 20%;">
+                                                <a href="#modal" class="open-modal table-link">
+                                                    <span class="button button__link fa-stack">
+                                                        <i class="fa fa-square fa-stack-2x"></i>
+                                                        <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>
+                                                    </span>
+                                                </a>
+                                                {% if d.status.name == 'WAIT_APPROVAL' or (d.status.name == 'WAIT_REPAIR' and current_user.role.name == 'STAFF') %}
+                                                    <a href="#" class="edit-modal table-link">
+                                                        <span class="fa-stack">
+                                                            <i class="fa fa-square fa-stack-2x"></i>
+                                                            <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                                                        </span>
+                                                    </a>
+                                                {% endif %}
+                                                {% if (d.status.name == 'REFUSE' and current_user.role.name == 'STAFF') or ((d.status.name == 'WAIT_APPROVAL' or d.status.name == 'REFUSE') and current_user.role.name == 'CUSTOMER') %}
+                                                    <a href="javascript:;" onclick="deleteForm({{d.id}})" class="table-link danger">
+                                                        <span class="fa-stack">
+                                                                <i class="bi bi-x-square-fill fa-stack-2x"></i>
+                                                        </span>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {%endfor%}
+                                    {% endif %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--pages-->
+                        <nav>
+                            {%if pages>1%}
+                                <ul class="pagination mt-3 justify-content-center">
+                                    {%for i in range(1, (pages+1))%}
+                                    <li class="page-item"><a class="page-link" href="/receptions/?page={{i}}">{{i}}</a></li>
+                                    {%endfor%}
+                                </ul>
+                            {%endif%}
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal-wrapper modal-receptionform" id="modal">
+            <div class="modal-body card">
+                <div class="modal-header">
+                    <h3>Thông tin khách</h3>
+                    <a href="#" class="close">&times;</a>
+                </div>
+                <p><strong>Họ tên:</strong> <span id="modal_name"></span></p>
+                <p><strong>Số điện thoại:</strong> <span id="modal_phone"></span></p>
+                <p><strong>Biển số xe:</strong> <span id="modal_car"></span></p>
+                <p><strong>Loại xe:</strong> <span id="modal_type"></span></p>
+                <p><strong>Trạng thái:</strong> <span id="modal_state"></span></p>
+                <p><strong>Ngày tạo:</strong> <span id="modal_date_crate"></span></p>
+                <p><strong>Ngày đặt:</strong> <span id="modal_date_book"></span></p>
+                <p><strong>Mô tả:</strong> <span id="modal_description"></span></p>
+            </div>
+            <a href="#!" class="outside-trigger"></a>
+        </div>
+
+        <!-- Modal Edit -->
+        <div class="modal-wrapper modal-receptionform" id="modal2">
+            <div class="modal-body card">
+                <div class="modal-header">
+                    <h3>Chỉnh sửa thông tin</h3>
+                    <a href="#" class="close close-modal2">&times;</a>
+                </div>
+
+                <form id="edit-form" class="p-5">
+                    <input type="hidden" id="modal_id2">
+                    <div class="d-flex justify-content-between gap-3">
+                        <p>
+                            <strong>Họ tên:</strong>
+                            <input type="text" id="modal_name2" class="modal-input" required>
+                        </p>
+                        <p>
+                            <strong>Số điện thoại:</strong>
+                            <input type="tel" id="modal_phone2" class="modal-input" required>
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between gap-3">
+                        <p>
+                            <strong>Biển số xe:</strong>
+                            <input type="text" id="modal_car2" class="modal-input">
+                        </p>
+
+                        <p>
+                            <label class="formbold-form-label">Loại xe</label>
+                            <select name="vehicle_type"
+                                    class="form-select"
+                                    id="modal_typeVehicle2">
+                                {%for i in vehicleType%}
+                                <option value="{{i.id}}">{{i.name}}</option>
+                                {%endfor%}
+                            </select>
+                        </p>
+                    </div>
+                    {%if current_user.role.name == 'STAFF'%}
+                    <p id="status-select-container">
+                        <strong>Trạng thái:</strong>
+                        <select id="modal_state2" class="modal-input">
+                                <option value="WAIT_REPAIR">Chấp nhận</option>
+                                <option value="REFUSE">Từ chối</option>
+                        </select>
+                    </p>
+                    {%else%}
+                        <input type="hidden" id="modal_state2_1" name="modal_state2_1">
+                    {%endif%}
+                    <div class="d-flex justify-content-between gap-3">
+                        <p>
+                            <strong>Ngày tạo:</strong>
+                            <input type="text" id="modal_date_create2" class="modal-input" readonly>
+                        </p>
+                        <p>
+                            <strong>Ngày đặt:</strong>
+                            <input type="datetime-local" id="modal_date_book2" class="modal-input" required>
+                        </p>
+                    </div>
+
+                    <p>
+                        <strong>Mô tả:</strong>
+                        <textarea id="modal_description2" class="modal-input" rows="3"></textarea>
+                    </p>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn-cancel close-modal2">Hủy</button>
+                        <button type="button" onclick="update_form()" class="btn-save">Lưu thay đổi</button>
+                    </div>
+                </form>
+            </div>
+            <a href="#!" class="outside-trigger outside-trigger2"></a>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('filterBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.getElementById('filterMenu').classList.toggle('show');
+            });
+
+            document.addEventListener('click', function() {
+                document.getElementById('filterMenu').classList.remove('show');
+        });
+
+        document.querySelectorAll('.open-modal').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const row = this.closest('tr');
+
+                const data = {
+                    id: row.dataset.id,
+                    name: row.dataset.name,
+                    dateCreate: row.dataset.dateCreate,
+                    dateBook: row.dataset.dateBook,
+                    status: row.dataset.status,
+                    phone: row.dataset.phone,
+                    car: row.dataset.car,
+                    customerType: row.dataset.customerType,
+                    avatar: row.dataset.avatar,
+                    description: row.dataset.description,
+                    state: row.dataset.state,
+                    type: row.dataset.typeVehicle
+                };
+
+                document.getElementById('modal_name').textContent = data.name;
+                document.getElementById('modal_date_crate').textContent = data.dateCreate;
+                document.getElementById('modal_date_book').textContent = data.dateBook;
+                document.getElementById('modal_state').textContent = data.status;
+                document.getElementById('modal_phone').textContent = data.phone;
+                document.getElementById('modal_car').textContent = data.car;
+                document.getElementById('modal_description').textContent = data.description;
+                document.getElementById('modal_type').textContent = data.type;
+                document.getElementById('modal_state').className = `label label-${data.state}`;
+            });
+        });
+
+        // Open edit modal
+        document.querySelectorAll('.edit-modal').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const row = this.closest('tr');
+                const modal = document.getElementById('modal2');
+
+                const data = {
+                    id: row.dataset.id,
+                    name: row.dataset.name,
+                    dateCreate: row.dataset.dateCreate,
+                    dateBook: row.dataset.dateBook,
+                    status: row.dataset.status,
+                    state: row.dataset.state,
+                    phone: row.dataset.phone,
+                    car: row.dataset.car,
+                    type: row.dataset.typeVehicle,
+                    description: row.dataset.description
+                };
+
+                document.getElementById('modal_id2').value = data.id;
+                document.getElementById('modal_name2').value = data.name;
+                document.getElementById('modal_phone2').value = data.phone;
+                document.getElementById('modal_car2').value = data.car;
+                document.getElementById('modal_date_create2').value = data.dateCreate;
+                document.getElementById('modal_description2').value = data.description;
+                document.getElementById('modal_typeVehicle2').value = data.type;
+
+
+                if (data.dateBook) {
+                    const [date, time] = data.dateBook.split(' ');
+                    const [day, month, year] = date.split('/');
+                    document.getElementById('modal_date_book2').value = `${year}-${month}-${day}T${time}`;
+                }
+
+                const staffDropdown = document.getElementById('modal_state2');
+                if (staffDropdown) {
+                    staffDropdown.value = data.state;
+                }
+
+                const customerHidden = document.getElementById('modal_state2_1');
+                if (customerHidden) {
+                    customerHidden.value = data.state;
+                }
+
+                const statusContainer = document.getElementById('status-select-container');
+
+                if (staffDropdown && statusContainer) {
+                    if (data.state === 'WAIT_APPROVAL') {
+                        statusContainer.style.display = 'block';
+                        staffDropdown.value = data.state;
+                    } else {
+                        statusContainer.style.display = 'none';
+                    }
+                }
+
+                modal.classList.add('active');
+            });
+        });
+
+        // Close modal 2
+        document.querySelectorAll('.close-modal2').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('modal2').classList.remove('active');
+            });
+        });
+
+        document.querySelector('.outside-trigger2').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('modal2').classList.remove('active');
+        });
+
+        // ESC key to close both modals
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('modal').classList.remove('active');
+                document.getElementById('modal2').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
+   {%endblock%}
+</body>

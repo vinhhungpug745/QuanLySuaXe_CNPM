@@ -1,0 +1,203 @@
+{%extends 'layout/base.html'%}
+{% block title %}Đặt/Tạo phiếu{% endblock %}
+<body>
+{%block content%}
+    <div class="formbold-form-wrapper mt-3 mb-5">
+        <form action="/appointment/create" method="POST">
+            <div class="flex flex-wrap formbold--mx-3 formbold-mb-5">
+                <div class="w-full sm:w-half formbold-px-3">
+                    <label for="name" class="formbold-form-label"> Họ và Tên </label>
+                    <input  onfocus="{%if current_user.role.name == 'CUSTOMER'%}fillInfor(){%endif%}"
+                            pattern="[A-Za-zÀ-ỹ\s]{2,50}"
+                            type="text"
+                            name="name"
+                            id="name"
+                            placeholder="Nhập họ và tên"
+                            class="formbold-form-input fill-info-name"
+                    required/>
+                </div>
+                <div class="w-full sm:w-half formbold-px-3">
+                    <label for="phone" class="formbold-form-label"> Số điện thoại </label>
+                    <input  onfocus="{%if current_user.role.name == 'CUSTOMER'%}fillInfor(){%endif%}"
+                            pattern="[0-9]*"
+                            type="text"
+                            name="phone"
+                            id="phone"
+                            placeholder="Nhập số điện thoại của bạn"
+                            class="formbold-form-input fill-info-phonenumber"
+                    required/>
+                </div>
+            </div>
+            <div class="flex flex-wrap formbold--mx-3 formbold-mb-5">
+                <div class="w-full sm:w-half formbold-px-3">
+                    <label for="name" class="formbold-form-label"> Biển số xe </label>
+                    <input  pattern="[0-9]{2}[A-Za-z]{1,2}[0-9]{0,3}-?[0-9]{1,5}"
+                            type="text"
+                            name="car_number"
+                            id="car_number"
+                            placeholder="Nhập biển số xe"
+                            class="formbold-form-input" required/>
+                </div>
+                <div class="w-full sm:w-half formbold-px-3">
+                    <label class="formbold-form-label">Loại xe</label>
+                    <select name="vehicle_type"
+                            id="preferred-shift"
+                            class="form-select">
+                        {%for i in vehicleType%}
+                        <option value="{{i.id}}">{{i.name}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label for="liked-most" class="formbold-form-label"
+                >Tình trạng xe</label
+                >
+                <textarea
+                        name="description"
+                        id="liked-most"
+                        rows="3"
+                        class="form-textarea"
+                 required></textarea >
+            </div>
+            {% if current_user.role.name == 'CUSTOMER' %}
+                <div class="flex flex-wrap formbold--mx-3 formbold-pt-5 formbold-mb-5">
+                    <div class="w-full sm:w-half formbold-px-3">
+                        <div class="formbold-mb-5 w-full">
+                            <label for="date" class="formbold-form-label"> Ngày đặt sửa </label>
+                            <input
+                                    type="date"
+                                    name="date"
+                                    id="date"
+                                    min="{{today}}"
+                                    class="formbold-form-input"
+                            required/>
+                        </div>
+                    </div>
+                    <div class="w-full sm:w-half formbold-px-3">
+                        <div class="formbold-mb-5">
+                            <label for="time" class="formbold-form-label"> Thời gian đến </label>
+                            <input
+                                    type="time"
+                                    name="time"
+                                    id="time"
+                                    class="formbold-form-input"
+                            required/>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div>
+                <button class="formbold-btn" type="submit" name="action" value="customer" id="liveToastBtn">{{tilte}}
+                </button>
+            </div>
+        </form>
+    </div>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Inter", Arial, Helvetica, sans-serif;
+        }
+        .form-group {
+            margin-bottom: 1.5rem; /* mb-6 */
+        }
+        .form-textarea {
+            width: 100%;
+            border-radius: 0.375rem; /* rounded-md */
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            padding: 0.75rem; /* p-3 */
+            font-size: 0.875rem; /* text-sm */
+            color: #1f2937; /* text-gray-800 */
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .formbold-mb-5 {
+            margin-bottom: 20px;
+        }
+
+        .formbold-form-wrapper {
+            margin: 0 auto;
+            max-width: 550px;
+            width: 100%;
+            background: transparent;
+        }
+
+        .formbold-form-label {
+            display: block;
+            font-weight: 500;
+            font-size: 16px;
+            color: #07074d;
+            margin-bottom: 12px;
+        }
+
+        .formbold-form-input {
+            width: 100%;
+            padding: 12px 24px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            font-weight: 500;
+            font-size: 16px;
+            color: #6b7280;
+            outline: none;
+            resize: none;
+        }
+
+        .formbold-form-input:focus {
+            border-color: #6a64f1;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .formbold-btn {
+            text-align: center;
+            font-size: 16px;
+            border-radius: 6px;
+            padding: 14px 32px;
+            border: none;
+            font-weight: 600;
+            background-color: #C80000;
+            color: white;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .formbold-btn:hover {
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .formbold--mx-3 {
+            margin-left: -12px;
+            margin-right: -12px;
+        }
+
+        .formbold-px-3 {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        @media (min-width: 540px) {
+            .sm\:w-half {
+                width: 50%;
+            }
+        }
+    </style>
+{%endblock%}
+</body>

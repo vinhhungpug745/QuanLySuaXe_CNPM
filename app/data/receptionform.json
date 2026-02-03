@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Nguyen Van A",
+    "phonenumber": "0912345678",
+    "carnumber": "29A-12345",
+    "created_date": "2025-12-15T09:00:00",
+    "appointment_date": "2025-12-16T10:00:00",
+    "description": "Xe bị hỏng thắng, cần kiểm tra nhanh",
+    "veType_id": 1,
+    "customer_id": 2,
+    "staff_id": 3
+  },
+  {
+    "id": 2,
+    "name": "Tran Thi B",
+    "phonenumber": "0987654321",
+    "carnumber": "30B-54321",
+    "created_date": "2025-12-15T09:30:00",
+    "appointment_date": "2025-12-16T11:00:00",
+    "description": "Bảo dưỡng định kỳ, thay nhớt",
+    "veType_id": 2,
+    "customer_id": 2,
+    "staff_id": 3
+  }
+]

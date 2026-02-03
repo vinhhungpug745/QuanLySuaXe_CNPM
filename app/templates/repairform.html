@@ -1,0 +1,421 @@
+{% extends 'layout/base.html' %}
+{% block title %}Phiếu sửa chữa{% endblock %}
+
+{% block content %}
+
+<div class="form_receptions">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="main-box clearfix">
+                    <div class="table-responsive">
+                        <table class="table user-list table-hover">
+                            <thead>
+                            <tr>
+                                <th><span>Người dùng</span></th>
+                                <th><span>Ngày sửa</span></th>
+                                <th class="text-center"><span>Trạng thái</span></th>
+                                <th><span>Số điện thoại</span></th>
+                                <th><span>Biển số xe</span></th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if not data %}
+                                <tr>
+                                    <td colspan="7" class="text-center" style="padding: 80px 20px;">
+                                        <i class="fa fa-inbox fa-5x text-muted mb-3 d-block"></i>
+                                        <h3 class="text-muted mb-2">Không tìm thấy phiếu</h3>
+                                        <p class="text-secondary mb-0">Chưa có dữ liệu để hiển thị</p>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                {% for d in data %}
+                                    <tr data-receptionform-id="{{ d.id }}">
+
+                                    <td class="info">
+                                        {% if d.customer_id is not none %}
+                                            <img src={{ d.customer.avatar }} alt="">
+                                        {% endif %}
+                                        <a href="#" class="user-link">{{ d.name }}</a>
+                                        {% if d.customer_id is none %}
+                                            <span class="user-subhead">Trực tiếp</span>
+                                        {% else %}
+                                            <span class="user-subhead">Trực tuyến</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="date">{{ d.appointment_date.strftime('%d-%m-%Y') }}</td>
+                                    <td class="state text-center">
+                                        <span class="label label-default{{ d.status.name }}">{{ state[d.status] }}</span>
+                                    </td>
+                                    <td class="phone_number">{{ d.phonenumber }}</td>
+                                    <td class="car_number">{{ d.carnumber }}</td>
+                                    <td style="width: 20%;">
+                                        <a href="#" class="open-modal table-link">
+                                            <span class="button button__link fa-stack">
+                                                <i class="fa fa-square fa-stack-2x"></i>
+                                                <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </a>
+                                    </td>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <nav>
+                        <ul class="pagination">
+                            <li class="page-item"><a class="page-link" href="#"><i class="fa fa-chevron-left"></i></a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">4</a></li>
+                            <li class="page-item"><a class="page-link" href="#">5</a></li>
+                            <li class="page-item"><a class="page-link" href="#"><i class="fa fa-chevron-right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-wrapper" id="modal">
+        <div class="modal-body">
+            <div class="modal-header">
+                <h3>PHIẾU SỬA XE</h3>
+                <a href="#" class="close">&times;</a>
+            </div>
+
+            <div class="modal-info">
+                <strong>Họ tên:</strong> <span id="modal_name"></span>
+                <strong>Số điện thoại:</strong> <span id="modal_phone"></span>
+                <strong>Biển số xe:</strong> <span id="modal_car"></span>
+            </div>
+
+            <form id="repair-form" method="POST">
+                <!-- Hidden input cho receptionform_id -->
+                <input type="hidden" id="receptionform_id" name="receptionform_id">
+
+                <div class="modal-content">
+                    <!-- Items Container -->
+                    <div class="items-container" id="items-container">
+                        <!-- Dòng đầu tiên -->
+                        <div class="repair-item">
+                            <div class="item-row">
+                                <input name="items[0][action]" type="text" placeholder="Lỗi" class="error-input"
+                                       required>
+                                <input name="items[0][cost]" type="text" placeholder="Tiền công" class="labor-input"
+                                       required>
+
+                                <!-- Search Container với Dropdown -->
+                                <div class="search-container">
+                                    <input type="text" placeholder="Tìm linh kiện..." class="search-input" required>
+                                    <!-- Hidden input cho component_id -->
+                                    <input type="hidden" name="items[0][component_id]" class="component-id-input"
+                                           required>
+                                    <div class="search-dropdown">
+                                        <!-- Filter Row -->
+                                        <div class="search-filters">
+                                            <select class="vehicle-brand">
+                                                <option value="">Hãng xe</option>
+                                                {% for brand in brands %}
+                                                    <option value="{{ brand.id }}">{{ brand.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <select class="vehicle-type">
+                                                <option value="">Loại xe</option>
+                                                {% for vehicle in vehicles %}
+                                                    <option value="{{ vehicle.id }}">{{ vehicle.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <button type="button" class="btn-apply-filter">Lọc</button>
+                                        </div>
+                                        <div class="search-results"></div>
+                                    </div>
+                                </div>
+
+                                <input name="items[0][quantity]" type="text" placeholder="Số lượng"
+                                       class="quantity-input" required>
+                                <input type="text" placeholder="Tiền linh kiện" class="part-price-input" readonly
+                                       required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button type="button" class="btn-primary" id="add-items">Thêm dòng</button>
+                        <button type="submit" class="btn-primary" id="confirm-btn">Xác nhận</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==================== DATA FROM BACKEND ====================
+    const componentsData = {{ comps | tojson | safe }};
+    const itemsContainer = document.getElementById('items-container');
+    const itemTemplate = itemsContainer.querySelector('.repair-item').cloneNode(true);
+
+    // ==================== MODAL CONTROLS ====================
+    function closeModal() {
+        document.getElementById('modal').classList.remove('active');
+    }
+
+    document.querySelectorAll('.open-modal').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const tr = this.closest('tr');
+
+            // Hiển thị thông tin
+            document.getElementById('modal_name').textContent = tr.querySelector('.user-link').textContent;
+            document.getElementById('modal_phone').textContent = tr.querySelector('.phone_number').textContent;
+            document.getElementById('modal_car').textContent = tr.querySelector('.car_number').textContent;
+
+            // Lấy receptionform_id từ data attribute
+            const receptionformId = tr.getAttribute('data-receptionform-id');
+            document.getElementById('receptionform_id').value = receptionformId;
+
+            // Bật modal
+            document.getElementById('modal').classList.add('active');
+        });
+    });
+
+    document.querySelector('.close').addEventListener('click', function (e) {
+        e.preventDefault();
+        closeModal();
+        resetItems();
+    });
+
+    document.getElementById('modal').addEventListener('click', function (e) {
+        if (e.target === this) closeModal();
+    });
+
+    document.querySelector('.modal-body').addEventListener('click', function (e) {
+        e.stopPropagation();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && document.getElementById('modal').classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    // ==================== SEARCH FUNCTIONALITY ====================
+    function attachSearchEvents(item) {
+        const searchInput = item.querySelector('.search-input');
+        const dropdown = item.querySelector('.search-dropdown');
+        const resultsContainer = item.querySelector('.search-results');
+        const vehicleBrand = item.querySelector('.vehicle-brand');
+        const vehicleType = item.querySelector('.vehicle-type');
+        const applyFilterBtn = item.querySelector('.btn-apply-filter');
+        const componentIdInput = item.querySelector('.component-id-input');
+
+        let currentFilter = {
+            brand_id: '',
+            vehicle_id: ''
+        };
+
+        // Mở dropdown khi click vào search
+        searchInput.addEventListener('click', function (e) {
+            e.stopPropagation();
+            dropdown.classList.add('active');
+            performSearch();
+        });
+
+        // Tìm kiếm khi gõ
+        searchInput.addEventListener('input', function () {
+            performSearch();
+        });
+
+        // Apply filter khi click nút Lọc
+        applyFilterBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            currentFilter.brand_id = vehicleBrand.value;
+            currentFilter.vehicle_id = vehicleType.value;
+            performSearch();
+        });
+
+        // Reset filter khi thay đổi select
+        vehicleBrand.addEventListener('change', function () {
+            currentFilter.brand_id = '';
+        });
+
+        vehicleType.addEventListener('change', function () {
+            currentFilter.vehicle_id = '';
+        });
+
+        // Thực hiện tìm kiếm
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let results = [...componentsData];
+
+            // Filter by brand_id
+            if (currentFilter.brand_id) {
+                results = results.filter(comp =>
+                    String(comp.brand_id) === String(currentFilter.brand_id)
+                );
+            }
+
+            // Filter by vehicle_id
+            if (currentFilter.vehicle_id) {
+                results = results.filter(comp =>
+                    String(comp.vehicle_id) === String(currentFilter.vehicle_id)
+                );
+            }
+
+            // Search by name
+            if (searchTerm) {
+                results = results.filter(comp =>
+                    comp.name.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            displayResults(results);
+        }
+
+        // Hiển thị kết quả
+        function displayResults(results) {
+            resultsContainer.innerHTML = '';
+
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div class="no-results">Không tìm thấy linh kiện</div>';
+                return;
+            }
+
+            results.forEach(comp => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'search-result-item';
+
+                const price = parseFloat(comp.price || 0);
+                const formattedPrice = price.toLocaleString('vi-VN');
+
+                resultItem.innerHTML = `
+                        <span class="search-result-name">${comp.name}</span>
+                        <span class="search-result-price">${formattedPrice}đ</span>
+                    `;
+
+                // Click để chọn
+                resultItem.addEventListener('click', function () {
+                    searchInput.value = comp.name;
+
+                    // Lưu component_id vào hidden input
+                    if (componentIdInput) {
+                        componentIdInput.value = comp.id;
+                    }
+
+                    item.querySelector('.part-price-input').value = price;
+                    dropdown.classList.remove('active');
+                });
+
+                resultsContainer.appendChild(resultItem);
+            });
+        }
+    }
+
+    // Đóng dropdown khi click ra ngoài
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.search-container')) {
+            document.querySelectorAll('.search-dropdown').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        }
+    });
+
+    // ==================== ITEM MANAGEMENT ====================
+    function attachDeleteEvent(item) {
+        const deleteBtn = item.querySelector('.delete-item');
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', function () {
+                if (document.querySelectorAll('.repair-item').length > 1) {
+                    item.remove();
+                } else {
+                    alert('Phải có ít nhất một dòng!');
+                }
+            });
+        }
+    }
+
+    function resetItems() {
+        const container = document.getElementById('items-container');
+        container.innerHTML = '';
+
+        const newItem = itemTemplate.cloneNode(true);
+
+        newItem.querySelectorAll('input').forEach(input => {
+            input.value = '';
+            input.removeAttribute('data-comp-id');
+        });
+
+        newItem.querySelectorAll('select').forEach(select => {
+            select.value = '';
+        });
+
+        const results = newItem.querySelector('.search-results');
+        if (results) results.innerHTML = '';
+
+        container.appendChild(newItem);
+
+        attachDeleteEvent(newItem);
+        attachSearchEvents(newItem);
+    }
+
+    // Thêm dòng mới
+    document.getElementById('add-items').addEventListener('click', function () {
+        const container = document.getElementById('items-container');
+        const currentItemCount = container.querySelectorAll('.repair-item').length;
+        const newItem = document.createElement('div');
+        newItem.className = 'repair-item';
+
+        newItem.innerHTML = `
+                <button type="button" class="delete-item">×</button>
+                <div class="item-row">
+                    <input name="items[${currentItemCount}][action]" type="text" placeholder="Lỗi" class="error-input" required>
+                    <input name="items[${currentItemCount}][cost]" type="text" placeholder="Tiền công" class="labor-input" required>
+                    <div class="search-container">
+                        <input type="text" placeholder="Tìm linh kiện..." class="search-input" required>
+                        <input type="hidden" name="items[${currentItemCount}][component_id]" class="component-id-input" required>
+                        <div class="search-dropdown">
+                            <div class="search-filters">
+                                <select class="vehicle-brand">
+                                    <option value="">Hãng xe</option>
+                                    {% for brand in brands %}
+                                        <option value="{{ brand.id }}">{{ brand.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <select class="vehicle-type">
+                                    <option value="">Loại xe</option>
+                                    {% for vehicle in vehicles %}
+                                        <option value="{{ vehicle.id }}">{{ vehicle.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="button" class="btn-apply-filter">Lọc</button>
+                            </div>
+                            <div class="search-results"></div>
+                        </div>
+                    </div>
+                    <input name="items[${currentItemCount}][quantity]" type="text" placeholder="Số lượng" class="quantity-input" required>
+                    <input type="text" placeholder="Tiền linh kiện" class="part-price-input" readonly required>
+                </div>
+            `;
+
+        container.appendChild(newItem);
+        attachDeleteEvent(newItem);
+        attachSearchEvents(newItem);
+    });
+
+    // Khởi tạo items hiện có
+    document.querySelectorAll('.repair-item').forEach(item => {
+        attachDeleteEvent(item);
+        attachSearchEvents(item);
+    });
+
+    // ==================== FORM SUBMISSION ====================
+
+</script>
+{% endblock %}

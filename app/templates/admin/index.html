@@ -1,0 +1,30 @@
+{% extends 'admin/master.html' %}
+{% block title %}Quản trị HT{% endblock %}
+
+{% block body %}
+<div class="admin-dashboard">
+    <h2>Trang quản trị hệ thống</h2>
+    <p class="lead">Chào mừng <strong>{{ current_user.name }}</strong> đến với trang quản trị!</p>
+</div>
+
+<style>
+    .admin-dashboard {
+        padding: 20px;
+    }
+
+    .admin-dashboard .lead {
+        color: #6c757d;
+        margin-bottom: 30px;
+    }
+
+    .list-group-item {
+        border-left: 3px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .list-group-item:hover {
+        border-left-color: #007bff;
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}

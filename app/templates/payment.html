@@ -1,0 +1,214 @@
+{% extends 'layout/base.html' %}
+{% block title %}Thanh toán{% endblock %}
+
+{% block content %}
+<style>
+    /* ====== TỔNG THỂ ====== */
+    .invoice-wrapper {
+        max-width: 900px;
+        margin: auto;
+    }
+
+    /* ====== CARD ====== */
+    .invoice-card {
+        border: 2px solid #f1b0b7;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+        background: #fff;
+    }
+
+    /* ====== HEADER ====== */
+    .invoice-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fde2e4;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        color: #b02a37;
+    }
+
+
+
+    /* ====== REPAIR ====== */
+    .repair-card {
+        margin-top: 15px;
+    }
+
+    .repair-card h4 {
+        color: #b02a37;
+    }
+
+    /* ====== TABLE ====== */
+    .invoice-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    .invoice-table th,
+    .invoice-table td {
+        border: 1px solid #f1b0b7;
+        padding: 8px;
+    }
+
+    .invoice-table th {
+        background: #fde2e4;
+        color: #842029;
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    /* ====== TOTAL ====== */
+    .invoice-total {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+    .invoice-total p {
+        margin: 5px 0;
+    }
+
+    .grand-total {
+        font-size: 18px;
+        color: #b02a37;
+    }
+
+    /* ====== BUTTON ====== */
+    .invoice-action {
+        text-align: right;
+        margin-top: 15px;
+    }
+
+    .btn-export {
+        background: #dc3545;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+
+    .btn-export:hover {
+        background: #b02a37;
+    }
+</style>
+
+<div class="invoice-wrapper">
+    {% if receipt %}
+    <div class="invoice-card">
+        <!-- HEADER -->
+        <div class="invoice-header">
+            <h2>HÓA ĐƠN #{{ receipt.id }}</h2>
+        </div>
+        {% for rf in receipt.repair_forms %}
+        <div class="repair-card">
+            <h4>Phiếu sửa #{{ rf.id }}</h4>
+            <p>
+                <strong>Khách:</strong> {{ rf.reception_form.name }} <br>
+                <strong>Biển số:</strong> {{ rf.reception_form.carnumber }} <br>
+                <strong>KTV:</strong> {{ rf.technick.name }} <br>
+                <strong>Ngày:</strong> {{ receipt.created_date.strftime('%d/%m/%Y') }}
+            </p>
+
+            <table class="invoice-table">
+                <colgroup>
+                    <col style="width: 30%">
+                    <col style="width: 10%">
+                    <col style="width: 30%">
+                    <col style="width: 10%">
+                    <col style="width: 10%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>Hạng mục</th>
+                    <th>Tiền công</th>
+                    <th>Linh kiện</th>
+                    <th>Đơn giá</th>
+                    <th>SL</th>
+                    <th>Thành tiền</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for c in rf.components %}
+                <tr>
+                    <td>{{ c.action }}</td>
+                    <td class="right">{{ c.cost | vnd}}</td>
+                    <td>{{ c.component.name }}</td>
+                    <td class="right">{{ c.component.price | vnd}}</td>
+                    <td class="right">{{ c.quantity }}</td>
+                    <td class="right">
+                        {{ (c.component.price * c.quantity) | vnd}}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+
+        <!-- TOTAL -->
+        <div class="invoice-total">
+            <p>
+                <span>Tổng (chưa VAT)</span>
+                <strong>{{ (receipt.total_labor_cost + receipt.total_component_cost) | vnd}} VNĐ</strong>
+            </p>
+            <p class="grand-total">
+                <span>Tổng thanh toán (VAT {{ vat.VAT }}%)</span>
+                <strong>{{ receipt.total_cost | vnd }} VNĐ</strong>
+            </p>
+        </div>
+
+        <!-- ACTION -->
+
+        <div class="text-center mt-4">
+            <button id="btnPayMomo" class="btn btn-success btn-lg" onclick="payWithMomo({{receipt.id}})">
+                Thanh toán MoMo
+            </button>
+        </div>
+
+
+    </div>
+    {% else %}
+    <tr>
+        <td colspan="7" class="text-center ">
+            <div class="d-flex flex-column align-items-center gap-2 py-5">
+                <i class="fa fa-inbox fa-4x text-secondary opacity-50 py-2"></i>
+
+                <h5 class="fw-semibold text-secondary mb-0 py-2">
+                    Không có hóa đơn để thanh toán
+                </h5>
+
+                <p class="text-muted mb-0 py-2">
+                    Chưa có dữ liệu để hiển thị
+                </p>
+            </div>
+        </td>
+    </tr>
+    {% endif %}
+
+</div>
+
+<script>
+    function payWithMomo(receiptId) {
+        fetch(`/api/payment/momo/pay/${receiptId}`, {
+            method: "POST"
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.payUrl) {
+                window.location.href = data.payUrl;
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra khi thanh toán');
+        });
+    }
+</script>
+{% endblock %}

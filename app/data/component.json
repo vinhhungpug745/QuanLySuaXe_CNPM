@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "name": "Đĩa thắng",
+    "price": 360000,
+    "image": "https://hethongsuaxethongminh.vn/watermarks/696x696x1/upload/product/dia-thang-1751222128.png.webp",
+    "vehicle_id": 1,
+    "brand_id": 1
+  },
+  {
+    "id": 2,
+    "name": "Bộ thắng sau",
+    "price": 290000,
+    "image": "https://hethongsuaxethongminh.vn/watermarks/696x696x1/upload/product/bo-thang-sau-1751222294.png.webp",
+    "vehicle_id": 1,
+    "brand_id": 1
+  },
+  {
+    "id": 3,
+    "name": "Phuộc sau AB125",
+    "price": 180000,
+    "image": "https://hethongsuaxethongminh.vn/watermarks/600x600x1/upload/product/phuoc-sau-1751222654.png.webp",
+    "vehicle_id": 1,
+    "brand_id": 1
+  },
+  {
+    "id": 4,
+    "name": "Lọc gió AB125",
+    "price": 2900000,
+    "image": "https://hethongsuaxethongminh.vn/watermarks/320x320x1/upload/product/loc-gio-1751222602.png.webp",
+    "vehicle_id": 1,
+    "brand_id": 2
+  },
+  {
+    "id": 5,
+    "name": "Bánh mâm sau",
+    "price": 990000,
+    "image": "https://hethongsuaxethongminh.vn/watermarks/320x320x1/upload/product/banh-mam-sau-1751222516.png.webp",
+    "vehicle_id": 1,
+    "brand_id": 2
+  },
+  {
+    "id": 6,
+    "name": "Bộ nồi AB125",
+    "price": 3600000,
+    "image": "https://hethongsuaxethongminh.vn/watermarks/320x320x1/upload/product/bo-noi-1751223051.png.webp",
+    "vehicle_id": 1,
+    "brand_id": 2
+  },
+  {
+    "id": 7,
+    "name": "Bọc Ghế Đổi Màu Da Nội Thất Ô tô Cá Nhân Hóa",
+    "price": 10000000,
+    "image": "https://bacnam.vn/wp-content/webp-express/webp-images/uploads/2024/09/boc-ghe-doi-mau-da-noi-that-o-to-7.jpg.webp",
+    "vehicle_id": 2,
+    "brand_id": 3
+  },
+  {
+    "id": 8,
+    "name": "Camera 3 mắt cho xe Honda",
+    "price": 5000000,
+    "image": "https://bacnam.vn/wp-content/uploads/2024/03/Camera-3-mat-cho-xe-Kia-1.png",
+    "vehicle_id": 2,
+    "brand_id": 3
+  },
+  {
+    "id": 9,
+    "name": "Bóng Đèn Ô tô Chính Hãng",
+    "price":89000000,
+    "image": "https://bacnam.vn/wp-content/uploads/2024/03/Bong-Den-10.png",
+    "vehicle_id": 2,
+    "brand_id": 3
+  },
+  {
+    "id": 10,
+    "name": "Giảm xóc bóng hơi",
+    "price": 1200000,
+    "image": "https://cdn.hstatic.net/products/200000536179/z7261436621183_582931ed741f823440bc21127346550a_1e0148cf490541f7a0ee13912fd4e954_large.jpg",
+    "vehicle_id": 2,
+    "brand_id": 4
+  },
+  {
+    "id": 11,
+    "name": "Đèn pha, cụm đèn pha",
+    "price": 56090000,
+    "image": "https://cdn.hstatic.net/products/200000536179/z7146657612390_72cfdd4afeb59f5df19d7acb6ed2e4e3_ceb7ed6d0cac4f428bc1a83b0dfe4217_large.jpg",
+    "vehicle_id": 2,
+    "brand_id": 4
+  },
+  {
+    "id": 12,
+    "name": "Bugi đánh lửa Mercedes",
+    "price": 1200000,
+    "image": "https://cdn.hstatic.net/products/200000536179/z7142972490333_0cd68e1806a2d1e4d59f623cebdb3243_6f18667b46984f36b560ffaa8aed7300_large.jpg",
+    "vehicle_id": 2,
+    "brand_id": 4
+  }
+]
